@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import { Pool } from "pg";
+import Router from "./routes";
 
 const app = express();
 dotenv.config(); //Reads .env file and makes it accessible via process.env
@@ -26,6 +27,8 @@ const connectToDB = async () => {
 };
 
 connectToDB();
+
+app.use(Router);
 
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
   res.send("hi Circular miners");
