@@ -5,7 +5,7 @@ interface PingResponse {
 export default class PingController {
   public async getMessage(): Promise<PingResponse> {
     return {
-      message: "ping-pong",
+      message: "OMAE WA MOU SHINDEIRU!",
     };
   }
 }
