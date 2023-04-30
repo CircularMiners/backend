@@ -2,7 +2,6 @@
 import { Guid } from "guid-typescript";
 
 
-
 export interface MineRepresentativeDAO {
     mine_representative_id: Guid,
     mine_representative_name: string,
