@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 
-export async function insertToDB(params:MineRepresentativeDTO) {
+export async function insertToDB(params: MineRepresentativeDTO) {
 
     const client = await pool.connect();
 
@@ -19,7 +19,10 @@ export async function insertToDB(params:MineRepresentativeDTO) {
         mine_representative_company_name,
         mine_representative_usertype,
         mine_representative_phonenumber
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`;
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING 
+        mine_representative_id, mine_representative_name, 
+        mine_representative_email, mine_representative_company_name,
+        mine_representative_usertype, mine_representative_phonenumber`;
     const insertValues = [
         uuidv4(),
         params.mineRepresentativeName,
@@ -28,7 +31,6 @@ export async function insertToDB(params:MineRepresentativeDTO) {
         params.mineRepresentativeCompanyname,
         params.mineRepresentativeUsertype,
         params.mineRepresentativePhonenumber
-        
             ];
 
     const { rows } = await client.query(insertQuery, insertValues);
