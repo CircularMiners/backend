@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
+import { Guid } from "guid-typescript";
 import { MineRepresentativeDTO} from '../entities/mine_rep_entity';
-import {insertToDB} from "../services/mine_representative";
+import {insertToDB, getMineRepresentative} from "../services/mine_representative";
 
 const router = express.Router();
 router.use(express.json());
@@ -14,7 +15,7 @@ router.post("/registration/representative", async (req: Request, res: Response) 
 });
 
 router.get("/minerepresentative/:id", async (req: Request, res: Response) => {
-  const id = req.params.id;
+  const id =  Guid.parse(req.params.id );
   const userRepresentativeDAO = getMineRepresentative( id);
   const response = await userRepresentativeDAO;
   res.status(200).send(response);

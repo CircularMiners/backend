@@ -1,6 +1,5 @@
 import { MineRepresentativeDAO, MineRepresentativeDTO } from "../entities/mine_rep_entity";
 import { pool } from "../app";
-import { v4 as uuidv4 } from 'uuid';
 import { Guid } from "guid-typescript";
 
 
@@ -24,7 +23,7 @@ export async function insertToDB(params: MineRepresentativeDTO) {
         mine_representative_email, mine_representative_company_name,
         mine_representative_usertype, mine_representative_phonenumber`;
     const insertValues = [
-        uuidv4(),
+        Guid.create(),
         params.mineRepresentativeName,
         params.mineRepresentativeEmail,
         params.mineRepresentativePassword,
@@ -60,7 +59,7 @@ export async function getMineRepresentative(id: Guid) {
     
 
     const { rows } = await client.query(getQuery);
-    if(rows.length >0){
+   if(rows.length >0){
         return rows[0] as MineRepresentativeDAO;
     }
     
