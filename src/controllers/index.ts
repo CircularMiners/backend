@@ -1,7 +1,5 @@
-import express, { Request, Response } from "express";
-import { MineRepresentativeDTO} from '../entities/user_entity';
+import express from "express";
 import PingController from "../services/ping";
-import {insertToDB} from "../services/mine_representative";
 
 
 const router = express.Router();
@@ -13,12 +11,7 @@ router.get("/ping", async (_req, res) => {
   return res.send(response);
 });
 
-router.post("/registration/representative", async (req: Request, res: Response) => {
-  const userdto = req.body as MineRepresentativeDTO;
-  const userRepresentativeDAO = insertToDB( userdto);
-  const response = await userRepresentativeDAO;
-  res.status(201).send(response);
-});
+
 
 
 

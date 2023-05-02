@@ -1,7 +1,7 @@
-import { MineRepresentativeDAO, MineRepresentativeDTO } from "../entities/user_entity";
+import { MineRepresentativeDAO, MineRepresentativeDTO } from "../entities/mine_rep_entity";
 import { pool } from "../app";
 import { v4 as uuidv4 } from 'uuid';
-
+import { Guid } from "guid-typescript";
 
 
 export async function insertToDB(params: MineRepresentativeDTO) {
@@ -36,6 +36,30 @@ export async function insertToDB(params: MineRepresentativeDTO) {
     const { rows } = await client.query(insertQuery, insertValues);
 
     await client.query('COMMIT');
+    if(rows.length >0){
+        return rows[0] as MineRepresentativeDAO;
+    }
+    
+  } catch (e) {
+    await client.query('ROLLBACK');
+    console.error(e);
+    
+  } finally {
+    client.release();
+  }
+}
+
+export async function getMineRepresentative(id: Guid) {
+  const client = await pool.connect();
+
+    try {
+
+    const getQuery = `SELECT mine_representative_id, mine_representative_name, mine_representative_email, 
+    mine_representative_password, mine_representative_company_name, mine_representative_usertype, mine_representative_phonenumber 
+    FROM minerepresentative WHERE mine_representative_id = :${id};`;
+    
+
+    const { rows } = await client.query(getQuery);
     if(rows.length >0){
         return rows[0] as MineRepresentativeDAO;
     }
