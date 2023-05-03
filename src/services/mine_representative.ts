@@ -1,6 +1,7 @@
 import { MineRepresentativeDAO, MineRepresentativeDTO } from "../entities/mine_rep_entity";
 import { pool } from "../app";
 import { Guid } from "guid-typescript";
+import {v4 as uuidv4} from 'uuid';
 
 
 export async function insertToDB(params: MineRepresentativeDTO) {
@@ -23,7 +24,7 @@ export async function insertToDB(params: MineRepresentativeDTO) {
         mine_representative_email, mine_representative_company_name,
         mine_representative_usertype, mine_representative_phonenumber`;
     const insertValues = [
-        Guid.create(),
+        uuidv4(),
         params.mineRepresentativeName,
         params.mineRepresentativeEmail,
         params.mineRepresentativePassword,
@@ -53,18 +54,16 @@ export async function getMineRepresentative(id: Guid) {
 
     try {
 
-    const getQuery = `SELECT mine_representative_id, mine_representative_name, mine_representative_email, 
-    mine_representative_password, mine_representative_company_name, mine_representative_usertype, mine_representative_phonenumber 
-    FROM minerepresentative WHERE mine_representative_id = :${id};`;
+    const getQuery = `SELECT * FROM minerepresentative WHERE mine_representative_id='${id}'`;
     
 
     const { rows } = await client.query(getQuery);
+    console.log(rows);
    if(rows.length >0){
         return rows[0] as MineRepresentativeDAO;
     }
     
   } catch (e) {
-    await client.query('ROLLBACK');
     console.error(e);
     
   } finally {

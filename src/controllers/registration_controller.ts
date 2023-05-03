@@ -7,7 +7,7 @@ const router = express.Router();
 router.use(express.json());
 
 
-router.post("/registration/representative", async (req: Request, res: Response) => {
+router.post("/minerepresentative", async (req: Request, res: Response) => {
   const userdto = req.body as MineRepresentativeDTO;
   const userRepresentativeDAO = insertToDB( userdto);
   const response = await userRepresentativeDAO;
@@ -15,8 +15,11 @@ router.post("/registration/representative", async (req: Request, res: Response) 
 });
 
 router.get("/minerepresentative/:id", async (req: Request, res: Response) => {
-  const id =  Guid.parse(req.params.id );
-  const userRepresentativeDAO = getMineRepresentative( id);
+  const id =  req.params.id;
+  const guid = Guid.parse(id)
+  const userRepresentativeDAO = getMineRepresentative( guid);
   const response = await userRepresentativeDAO;
   res.status(200).send(response);
 });
+
+export default router;

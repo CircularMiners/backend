@@ -1,5 +1,6 @@
 import express from "express";
 import PingController from "../services/ping";
+import registration_controller from "./registration_controller";
 
 
 const router = express.Router();
@@ -12,7 +13,7 @@ router.get("/ping", async (_req, res) => {
 });
 
 
-
+router.use("/registration", registration_controller)
 
 
 export default router;
