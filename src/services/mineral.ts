@@ -62,15 +62,15 @@ export async function getMineral(chemicalFormula:string, chemicalName:string, no
 
     if (chemicalFormula !== "") 
     {
-        getQuery += `UPPER(mineral_chemical_formula) = UPPER(:${chemicalFormula})`;
+        getQuery += ` AND (UPPER(mineral_chemical_formula) = UPPER(:${chemicalFormula})) `;
     }
     if (chemicalName !== "") 
     {
-        getQuery += `UPPER(mineral_chemical_name) = UPPER(:${chemicalName})`;
+        getQuery += ` AND (UPPER(mineral_chemical_name) = UPPER(:${chemicalName})) `;
     }
     if (normalName !== "") 
     {
-        getQuery += `UPPER(mineral_name) = UPPER(:${normalName})`;
+        getQuery += ` AND (UPPER(mineral_name) = UPPER(:${normalName})) `;
     }
 	
 
