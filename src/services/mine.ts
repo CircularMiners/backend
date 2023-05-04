@@ -90,7 +90,8 @@ export async function getMine(id: Guid | undefined | null, name:string, location
 
         if(rows.length >0)
         {
-            return rows[0] as MineDAO;
+            //return rows[0] as MineDAO;
+            return rows.map((row: any) => row as MineDAO);
         }
         
     } 
