@@ -10,7 +10,7 @@ export async function insertToDB(params: MineralDTO) {
 	await client.query('BEGIN');
 
 	const insertQuery = `
-        INSERT INTO minerepresentative 
+        INSERT INTO mineral 
 		(
 			mineral_chemical_formula,
 			mineral_chemical_name, 
@@ -62,21 +62,22 @@ export async function getMineral(chemicalFormula:string, chemicalName:string, no
 
     if (chemicalFormula !== "") 
     {
-        getQuery += ` AND (UPPER(mineral_chemical_formula) = UPPER(:${chemicalFormula})) `;
+        getQuery += ` AND (UPPER(mineral_chemical_formula) = UPPER('${chemicalFormula}')) `;
     }
     if (chemicalName !== "") 
     {
-        getQuery += ` AND (UPPER(mineral_chemical_name) = UPPER(:${chemicalName})) `;
+        getQuery += ` AND (UPPER(mineral_chemical_name) = UPPER('${chemicalName}')) `;
     }
     if (normalName !== "") 
     {
-        getQuery += ` AND (UPPER(mineral_name) = UPPER(:${normalName})) `;
+        getQuery += ` AND (UPPER(mineral_name) = UPPER('${normalName}')) `;
     }
 	
 
 	const { rows } = await client.query(getQuery);
     if(rows.length >0){
-		return rows[0] as MineralDAO;
+		//return rows[0] as MineralDAO;
+		return rows.map((row: any) => row as MineralDAO);
 	}
 	
   } catch (e) {

@@ -6,20 +6,23 @@ const router = express.Router();
 router.use(express.json());
 
 
-router.put("/mineral/", async (req: Request, res: Response) => {
+router.put("/addmineral/", async (req: Request, res: Response) => {
   const mineraldto = req.body as MineralDTO;
   const mineralDAO = insertToDB( mineraldto );
   const response = await mineralDAO;
   res.status(201).send(response);
 });
 
-router.get("/mineral/:mineralChemicalFormula?/:mineralChemicalName?/:mineralName?", async (req: Request, res: Response) => {
-  const chemicalFormula =  req.params.mineralChemicalFormula ? req.params.mineralChemicalFormula : "";
-  const chemicalName =  req.params.mineralChemicalName ? req.params.mineralChemicalName : "";
-  const normalName =  req.params.mineralName ? req.params.mineralName : "";
+router.get("/searchmineral", async (req: Request, res: Response) => {
+  const chemicalFormula =  req.query.mineralChemicalFormula ? req.query.mineralChemicalFormula : "";
+  const chemicalName =  req.query.mineralChemicalName ? req.query.mineralChemicalName : "";
+  const normalName =  req.query.mineralName ? req.query.mineralName : "";
   
-  const mineralDAO = getMineral(chemicalFormula, chemicalName, normalName);
+  const mineralDAO = getMineral(chemicalFormula.toString(), chemicalName.toString(), normalName.toString());
   const response = await mineralDAO;
+
+  console.log(mineralDAO);
+  
   res.status(200).send(response);
 });
 
