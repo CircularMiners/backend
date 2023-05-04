@@ -60,28 +60,28 @@ export async function getMine(id: Guid | undefined | null, name:string, location
     {
         let getQuery:string = `
         SELECT mine_id, mine_name, mine_location, mine_description, mine_representative_id
-        FROM mineral 
+        FROM mine 
         WHERE 1=1` ;
 
         if (id !== null) 
         {
-            getQuery += ` AND (mine_id = :${id}) `;
+            getQuery += ` AND (mine_id = '${id}') `;
         }
         if (name !== "") 
         {
-            getQuery += ` AND UPPER(mine_name) = UPPER(:${name}) `;
+            getQuery += ` AND UPPER(mine_name) = UPPER('${name}') `;
         }
         if (location !== "") 
         {
-            getQuery += ` AND UPPER(mine_location) = UPPER(:${location}) `;
+            getQuery += ` AND UPPER(mine_location) = UPPER('${location}') `;
         }
         if (description !== "") 
         {
-            getQuery += ` AND UPPER(mine_description) = UPPER(:${description}) `;
+            getQuery += ` AND UPPER(mine_description) = UPPER('${description}') `;
         }
         if (RepresentativeID !== null) 
         {
-            getQuery += ` AND (mine_representative_id = :${RepresentativeID}) `;
+            getQuery += ` AND (mine_representative_id = '${RepresentativeID}') `;
         }
         
 
