@@ -1,11 +1,12 @@
 import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import { Pool } from "pg";
-import Router from "./routes";
+import Router from "./controllers";
 
 const app = express();
+app.use(Router);
 dotenv.config(); //Reads .env file and makes it accessible via process.env
-const pool = new Pool({
+export const pool = new Pool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   database: process.env.DB_NAME,
@@ -28,9 +29,8 @@ const connectToDB = async () => {
 
 connectToDB();
 
-app.use(Router);
 
-app.get("/test", (req: Request, res: Response, next: NextFunction) => {
+app.get("/test", (_req: Request, res: Response, _next: NextFunction) => {
   res.send("hi Circular miners");
 });
 
