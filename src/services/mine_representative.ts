@@ -29,7 +29,7 @@ export async function insertToDB(params: MineRepresentativeDTO) {
         params.mineRepresentativeEmail,
         params.mineRepresentativePassword,
         params.mineRepresentativeCompanyname,
-        params.mineRepresentativeUsertype,
+        "representative",
         params.mineRepresentativePhonenumber
             ];
 
