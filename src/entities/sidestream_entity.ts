@@ -29,13 +29,13 @@ export interface SideStreamDTO {
 
 export interface SideStreamwithMineDTO {
   id: Guid;
-  oreName: string;
+  meterialName: string;
   weight: number;
   size: number;
-  SidestreamDescription: string;
+  meterialDescription: string;
   mineName: string;
   mineLocation: string;
-  mineDescription: string;
+  companyName: string;
 }
 
 export interface SideStreamwithMineralCompositionDTO {
