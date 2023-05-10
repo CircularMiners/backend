@@ -5,6 +5,7 @@ import mineral_controller from "./mineral_controller";
 import sidestream_controller from "./sidestream_controller";
 import mine_controller from "./mine_controller";
 import login_controller from "./login_controller";
+import requestaccess_controller from "./requestaccess_controller";
 
 const router = express.Router();
 router.use(express.json());
@@ -22,5 +23,6 @@ router.use("/sidestream", sidestream_controller);
 router.use("/login", login_controller);
 
 router.use("/mineral", mineral_controller);
+router.use("/requestaccess", requestaccess_controller);
 
 export default router;

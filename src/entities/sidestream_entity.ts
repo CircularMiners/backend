@@ -8,6 +8,7 @@ export interface SideStreamDAO {
   sidestream_size: number;
   mine_representative_id: Guid;
   sidestream_description: string;
+  mine_id: Guid;
 }
 
 export interface MineralCompositionDAO {
@@ -23,8 +24,29 @@ export interface SideStreamDTO {
   description: string;
   weight: number;
   size: number;
-  mineRepresentative: Guid;
   compositionMaterial: MineComposition[];
+}
+
+export interface SideStreamwithMineDTO {
+  id: Guid;
+  meterialName: string;
+  weight: number;
+  size: number;
+  meterialDescription: string;
+  mineName: string;
+  mineLocation: string;
+  companyName: string;
+}
+
+export interface SideStreamwithMineralCompositionDTO {
+  id: Guid;
+  oreName: string;
+  weight: number;
+  size: number;
+  SidestreamDescription: string;
+  mineralFormula: string;
+  mineralName: string;
+  mineralPercentage: number;
 }
 
 interface MineComposition {

@@ -55,7 +55,6 @@ export async function getMineRepresentative(id: Guid) {
     const getQuery = `SELECT * FROM minerepresentative WHERE mine_representative_id='${id}'`;
 
     const { rows } = await client.query(getQuery);
-    console.log(rows);
     if (rows.length > 0) {
       return rows[0] as MineRepresentativeDAO;
     }
