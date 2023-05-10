@@ -78,11 +78,11 @@ export async function findMineandSidestream(oreName: string) {
   const client = await pool.connect();
 
   try {
-    const selectQuery = `SELECT sidestream.sidestream_id, sidestream.sidestream_orename, sidestream.sidestream_weight,
-    sidestream.sidestream_size, sidestream.sidestream_description, mine.mine_name, mine.mine_location, minerepresentative.mine_representative_company_name
-     FROM sidestream LEFT JOIN mine on sidestream.mine_id = mine.mine_id
-     mine INNER JOIN minerepresentative on mine.mine_representative_id = minerepresentative.mine_representative_id
-     WHERE sidestream_orename = $1`;
+    const selectQuery = `SELECT sidestream.sidestream_id, sidestream.sidestream_orename, sidestream.sidestream_weight, sidestream.sidestream_size, sidestream.sidestream_description, 
+    mine.mine_name, mine.mine_location, minerepresentative.mine_representative_company_name
+    FROM sidestream LEFT JOIN mine on sidestream.mine_id = mine.mine_id
+    INNER JOIN minerepresentative on mine.mine_representative_id = minerepresentative.mine_representative_id
+    WHERE sidestream.sidestream_orename = $1`;
     const insertValues = [oreName];
 
     const results = await client.query(selectQuery, insertValues);

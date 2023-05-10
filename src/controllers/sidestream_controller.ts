@@ -42,7 +42,7 @@ router.get("/:oreName", async (req: Request, res: Response) => {
 
 //this is for data requestor get one data if they have access
 router.get(
-  "requestor/:dataRequestorId/:sidestreamId",
+  "/requestor/:dataRequestorId/:sidestreamId",
   async (req: Request, res: Response) => {
     const dataRequestorId = Guid.parse(req.params.dataRequestorId);
     const sidestreamId = Guid.parse(req.params.sidestreamId);
