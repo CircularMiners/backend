@@ -42,6 +42,7 @@ CREATE TABLE sidestream (
 	sidestream_size NUMERIC,
 	mine_representative_id UUID REFERENCES minerepresentative(mine_representative_id),
 	sidestream_description VARCHAR(250) not null
+	mine_id UUID REFERENCES mine(mine_id) not null
 );
 
 
