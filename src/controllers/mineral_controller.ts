@@ -5,7 +5,7 @@ import { insertToDB, getMineral } from "../services/mineral";
 const router = express.Router();
 router.use(express.json());
 
-router.post("/addmineral/", async (req: Request, res: Response) => {
+router.put("/addmineral/", async (req: Request, res: Response) => {
   const mineraldto = req.body as MineralDTO;
   const mineralDAO = insertToDB(mineraldto);
   const response = await mineralDAO;

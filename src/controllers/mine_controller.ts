@@ -6,7 +6,7 @@ import { insertToDB, getMine } from "../services/mine";
 const router = express.Router();
 router.use(express.json());
 
-router.post("/addmine", async (req: Request, res: Response) => {
+router.put("/addmine", async (req: Request, res: Response) => {
   const minedto = req.body as MineDTO;
   const userDAO = insertToDB(minedto);
   const response = await userDAO;
