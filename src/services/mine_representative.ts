@@ -25,14 +25,14 @@ export async function insertToDB(params: MineRepresentativeDTO) {
         mine_representative_email, mine_representative_company_name,
         mine_representative_usertype, mine_representative_phonenumber`;
     const insertValues = [
-      uuidv4(),
-      params.mineRepresentativeName,
-      params.mineRepresentativeEmail,
-      params.mineRepresentativePassword,
-      params.mineRepresentativeCompanyname,
-      params.mineRepresentativeUsertype,
-      params.mineRepresentativePhonenumber,
-    ];
+        uuidv4(),
+        params.mineRepresentativeName,
+        params.mineRepresentativeEmail,
+        params.mineRepresentativePassword,
+        params.mineRepresentativeCompanyname,
+        "representative",
+        params.mineRepresentativePhonenumber
+            ];
 
     const { rows } = await client.query(insertQuery, insertValues);
 
@@ -64,4 +64,5 @@ export async function getMineRepresentative(id: Guid) {
   } finally {
     client.release();
   }
+}
 }

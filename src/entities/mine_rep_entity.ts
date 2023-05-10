@@ -15,6 +15,5 @@ export interface MineRepresentativeDTO {
   mineRepresentativeEmail: string;
   mineRepresentativePassword: string;
   mineRepresentativeCompanyname: string;
-  mineRepresentativeUsertype: string;
   mineRepresentativePhonenumber: number;
 }
