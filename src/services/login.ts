@@ -7,8 +7,8 @@ const userType = params.userType;
 const email = params.userEmail;
 const password = params.userPassword;
 
-
-  if (userType =='representative'){
+//Change Representative and Vendor to representative and requestor respectively if you face any error
+  if (userType =='Representative'){
     const selectQuery1 = `SELECT mine_representative_id FROM minerepresentative WHERE mine_representative_email = '${email}' AND mine_representative_password = '${password}'`;
     const {rows} = await pool.query(selectQuery1);
     if(rows.length >0){
@@ -18,7 +18,7 @@ const password = params.userPassword;
   else{
     return { status: 'invalid' }
   }
-  }else if (userType == 'requestor'){
+  }else if (userType == 'Vendor'){
     const selectQuery2 = `SELECT datarequestor_id FROM datarequestor WHERE datarequestor_email = '${email}' AND datarequestor_password = '${password}'`;
     const {rows} = await pool.query(selectQuery2);
     if(rows.length >0){

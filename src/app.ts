@@ -2,9 +2,18 @@ import express, { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import { Pool } from "pg";
 import Router from "./controllers";
+import cors from 'cors';
+
 
 const app = express();
+const allowedOrigins = ['http://localhost:3333'];
+const options: cors.CorsOptions = {
+  origin: allowedOrigins
+};
+
+app.use(cors(options));
 app.use(Router);
+
 dotenv.config(); //Reads .env file and makes it accessible via process.env
 export const pool = new Pool({
   host: process.env.DB_HOST,
