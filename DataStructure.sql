@@ -64,3 +64,6 @@ CREATE TABLE requestaccess (
 	datarequestor_id UUID REFERENCES datarequestor(datarequestor_id)
 );
 
+ALTER TABLE requestaccess ADD CONSTRAINT requestaccess_sidestream_datarequestor_unique UNIQUE (sidestream_id, datarequestor_id);
+
+

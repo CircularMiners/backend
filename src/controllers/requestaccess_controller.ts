@@ -23,6 +23,9 @@ router.post(
     const message = req.body as RequestAccessDTO;
     const requestaccess = insertToDB(dataRequestorId, sideStreamId, message);
     const response = await requestaccess;
+    if (response == null) {
+      res.status(400).send("Request already exists");
+    }
     res.status(201).send(response);
   }
 );

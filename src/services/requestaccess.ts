@@ -26,9 +26,10 @@ export async function insertToDB(
         sidestream_id,
         mine_representative_id,
         datarequestor_id
-        ) VALUES ($1, $2, $3, $4, $5, (SELECT mine_representative_id FROM sidestream where sidestream_id ='${sideStreamId}'), $6) RETURNING 
-        request_access_id,request_access_message,request_access_datetime,request_access_status,
-        sidestream_id,mine_representative_id,datarequestor_id ON CONFLICT (sidestream_id, datarequestor_id) DO NOTHING`;
+        ) VALUES ($1, $2, $3, $4, $5, (SELECT mine_representative_id FROM sidestream where sidestream_id ='${sideStreamId}'), $6) 
+        ON CONFLICT (sidestream_id, datarequestor_id) DO NOTHING
+        RETURNING request_access_id,request_access_message,request_access_datetime,request_access_status,
+        sidestream_id,mine_representative_id,datarequestor_id`;
     const insertValues = [
       uuidv4(),
       message.requestAccessMessage,
