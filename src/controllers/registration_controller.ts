@@ -10,13 +10,17 @@ import {
   insertToDB_DataReq,
   getDataRequestor,
 } from "../services/data_requestor";
+import { encryptPassword } from "../utils/constants";
 
 const router = express.Router();
 router.use(express.json());
 
 router.post("/minerepresentative", async (req: Request, res: Response) => {
   const userdto = req.body as MineRepresentativeDTO;
-  const userRepresentativeDAO = insertToDB(userdto);
+  const encryptedPassword = await encryptPassword(
+    userdto.mineRepresentativePassword
+  );
+  const userRepresentativeDAO = insertToDB(userdto, encryptedPassword);
   const response = await userRepresentativeDAO;
   res.status(201).send(response);
 });
@@ -31,7 +35,10 @@ router.get("/minerepresentative/:id", async (req: Request, res: Response) => {
 
 router.post("/datarequestor", async (req: Request, res: Response) => {
   const userdto = req.body as DataRequestorDTO;
-  const userRequestorDAO = insertToDB_DataReq(userdto);
+  const encryptedPassword = await encryptPassword(
+    userdto.dataRequestorPassword
+  );
+  const userRequestorDAO = insertToDB_DataReq(userdto, encryptedPassword);
   const response = await userRequestorDAO;
   res.status(201).send(response);
 });

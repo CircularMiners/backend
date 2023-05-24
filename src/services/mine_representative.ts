@@ -6,7 +6,10 @@ import { pool } from "../app";
 import { Guid } from "guid-typescript";
 import { v4 as uuidv4 } from "uuid";
 
-export async function insertToDB(params: MineRepresentativeDTO) {
+export async function insertToDB(
+  params: MineRepresentativeDTO,
+  encryptedPassword: string
+) {
   const client = await pool.connect();
 
   try {
@@ -28,7 +31,7 @@ export async function insertToDB(params: MineRepresentativeDTO) {
       uuidv4(),
       params.mineRepresentativeName,
       params.mineRepresentativeEmail,
-      params.mineRepresentativePassword,
+      encryptedPassword,
       params.mineRepresentativeCompanyname,
       "representative",
       params.mineRepresentativePhonenumber,
