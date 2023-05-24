@@ -36,6 +36,7 @@ export interface SideStreamwithMineDTO {
   mineName: string;
   mineLocation: string;
   companyName: string;
+  requestStatus: string;
 }
 
 export interface SideStreamwithMineralCompositionDTO {

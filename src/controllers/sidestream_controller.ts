@@ -33,12 +33,16 @@ router.post("/:mineRepId/:mineId", async (req: Request, res: Response) => {
 // );
 
 //this is for data requestor get all OPEN data based on meterial name
-router.get("/:oreName", async (req: Request, res: Response) => {
-  const oreName = req.params.oreName;
-  const sidestreams = findMineandSidestream(oreName);
-  const response = await sidestreams;
-  res.status(200).send(response);
-});
+router.get(
+  "/search/:dataRequestorId/:oreName",
+  async (req: Request, res: Response) => {
+    const oreName = req.params.oreName;
+    const dataRequestorId = req.params.dataRequestorId;
+    const sidestreams = findMineandSidestream(dataRequestorId, oreName);
+    const response = await sidestreams;
+    res.status(200).send(response);
+  }
+);
 
 //this is for data requestor get one data if they have access
 router.get(

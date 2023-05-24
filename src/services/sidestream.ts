@@ -74,16 +74,20 @@ export async function insertToDB(
   }
 }
 
-export async function findMineandSidestream(oreName: string) {
+export async function findMineandSidestream(
+  dataRequestorId: string,
+  oreName: string
+) {
   const client = await pool.connect();
 
   try {
     const selectQuery = `SELECT sidestream.sidestream_id, sidestream.sidestream_orename, sidestream.sidestream_weight, sidestream.sidestream_size, sidestream.sidestream_description, 
-    mine.mine_name, mine.mine_location, minerepresentative.mine_representative_company_name
+    mine.mine_name, mine.mine_location, minerepresentative.mine_representative_company_name, requestaccess.request_access_status
     FROM sidestream LEFT JOIN mine on sidestream.mine_id = mine.mine_id
+    LEFT JOIN requestaccess ON sidestream.sidestream_id = requestaccess.sidestream_id AND requestaccess.datarequestor_id = $1
     INNER JOIN minerepresentative on mine.mine_representative_id = minerepresentative.mine_representative_id
-    WHERE sidestream.sidestream_orename = $1`;
-    const insertValues = [oreName];
+    WHERE sidestream.sidestream_orename = $2`;
+    const insertValues = [dataRequestorId, oreName];
 
     const results = await client.query(selectQuery, insertValues);
 
@@ -96,6 +100,8 @@ export async function findMineandSidestream(oreName: string) {
       mineName: row.mine_name,
       mineLocation: row.mine_location,
       companyName: row.mine_representative_company_name,
+      requestStatus:
+        row.request_access_status == "APPROVED" ? "OPEN" : "CLOSED",
     }));
     return sidestreams;
   } catch (e) {
