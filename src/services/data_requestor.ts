@@ -14,32 +14,37 @@ export async function insertToDB_DataReq(
 
   try {
     await client.query("BEGIN");
-
-    const insertQuery = `INSERT INTO datarequestor 
+    const selectQuery = `SELECT datarequestor_id FROM datarequestor WHERE datarequestor_email = '${params.dataRequestorEmail}'`;
+    const result = await pool.query(selectQuery);
+    if (result.rows.length == 0) {
+      const insertQuery = `INSERT INTO datarequestor 
         (datarequestor_id,
         datarequestor_name, 
         datarequestor_email,
         datarequestor_password,
         datarequestor_company_name,
         datarequestor_usertype
-        ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING 
+        ) VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING 
         datarequestor_id, datarequestor_name, 
         datarequestor_email, datarequestor_company_name,
         datarequestor_usertype`;
-    const insertValues = [
-      uuidv4(),
-      params.dataRequestorName,
-      params.dataRequestorEmail,
-      encryptedPassword,
-      params.dataRequestorCompanyname,
-      "requestor",
-    ];
+      const insertValues = [
+        uuidv4(),
+        params.dataRequestorName,
+        params.dataRequestorEmail,
+        encryptedPassword,
+        params.dataRequestorCompanyname,
+        "requestor",
+      ];
 
-    const { rows } = await client.query(insertQuery, insertValues);
-
-    await client.query("COMMIT");
-    if (rows.length > 0) {
-      return rows[0] as DataRequestorDAO;
+      const { rows } = await client.query(insertQuery, insertValues);
+      await client.query("COMMIT");
+      if (rows.length > 0) {
+        return rows[0] as DataRequestorDAO;
+      }
+    } else {
+      return "User already exists";
     }
   } catch (e) {
     await client.query("ROLLBACK");

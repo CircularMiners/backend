@@ -55,3 +55,18 @@ interface MineComposition {
   mineralName: string;
   mineralPercentage: number;
 }
+
+export interface SideStreams {
+  companyName: string;
+  mineName: string;
+  mineLocation: string;
+  mineDescription: string;
+  sidestreamId: Guid;
+  materialName: string;
+  weight: number;
+  size: number;
+  materialDescription: string;
+  mineralName: string;
+  mineralFormula: string;
+  mineralPercentage: number;
+}

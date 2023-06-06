@@ -14,8 +14,10 @@ export async function insertToDB(
 
   try {
     await client.query("BEGIN");
-
-    const insertQuery = `INSERT INTO minerepresentative 
+    const selectQuery = `SELECT mine_representative_id FROM minerepresentative WHERE mine_representative_email = '${params.mineRepresentativeEmail}'`;
+    const result = await pool.query(selectQuery);
+    if (result.rows.length == 0) {
+      const insertQuery = `INSERT INTO minerepresentative 
         (mine_representative_id,
         mine_representative_name, 
         mine_representative_email,
@@ -23,25 +25,29 @@ export async function insertToDB(
         mine_representative_company_name,
         mine_representative_usertype,
         mine_representative_phonenumber
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING 
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7) 
+        RETURNING 
         mine_representative_id, mine_representative_name, 
         mine_representative_email, mine_representative_company_name,
         mine_representative_usertype, mine_representative_phonenumber`;
-    const insertValues = [
-      uuidv4(),
-      params.mineRepresentativeName,
-      params.mineRepresentativeEmail,
-      encryptedPassword,
-      params.mineRepresentativeCompanyname,
-      "representative",
-      params.mineRepresentativePhonenumber,
-    ];
+      const insertValues = [
+        uuidv4(),
+        params.mineRepresentativeName,
+        params.mineRepresentativeEmail,
+        encryptedPassword,
+        params.mineRepresentativeCompanyname,
+        "representative",
+        params.mineRepresentativePhonenumber,
+      ];
 
-    const { rows } = await client.query(insertQuery, insertValues);
+      const { rows } = await client.query(insertQuery, insertValues);
 
-    await client.query("COMMIT");
-    if (rows.length > 0) {
-      return rows[0] as MineRepresentativeDAO;
+      await client.query("COMMIT");
+      if (rows.length > 0) {
+        return rows[0] as MineRepresentativeDAO;
+      }
+    } else {
+      return "User already exists";
     }
   } catch (e) {
     await client.query("ROLLBACK");

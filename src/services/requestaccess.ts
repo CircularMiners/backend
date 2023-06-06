@@ -53,6 +53,7 @@ export async function insertToDB(
   }
 }
 
+// get data as a data Representative
 export async function getAllAccessRequest(mineRepId: Guid) {
   const client = await pool.connect();
 
@@ -81,6 +82,7 @@ export async function getAllAccessRequest(mineRepId: Guid) {
   }
 }
 
+// get data as a data Representative
 export async function getOneAccessRequest(
   mineRepId: Guid,
   dataRequestorId: string
@@ -139,6 +141,7 @@ export async function updateAccessRequest(
   }
 }
 
+// get data as a data Requestor
 export async function getAllAccessRequestForDataRequestor(
   dataRequestorId: Guid
 ) {

@@ -4,6 +4,7 @@ import {
   SideStreamDTO,
   SideStreamwithMineDTO,
   SideStreamwithMineralCompositionDTO,
+  SideStreams,
 } from "../entities/sidestream_entity";
 import { pool } from "../app";
 import { v4 as uuidv4 } from "uuid";
@@ -89,9 +90,9 @@ export async function findMineandSidestream(
     WHERE sidestream.sidestream_orename = $2`;
     const insertValues = [dataRequestorId, oreName];
 
-    const results = await client.query(selectQuery, insertValues);
+    const { rows } = await client.query(selectQuery, insertValues);
 
-    const sidestreams: SideStreamwithMineDTO[] = results.rows.map((row) => ({
+    const sidestreams: SideStreamwithMineDTO[] = rows.map((row) => ({
       id: row.sidestream_id,
       meterialName: row.sidestream_orename,
       weight: row.sidestream_weight,
@@ -162,26 +163,27 @@ export async function getOneMineandSidestream(
      FROM requestaccess INNER JOIN datarequestor on requestaccess.datarequestor_id = datarequestor.datarequestor_id
      LEFT JOIN sidestream on sidestream.sidestream_id = requestaccess.sidestream_id 
      LEFT JOIN mineralcomposition on sidestream.sidestream_id = mineralcomposition.sidestream_id
-     INNER JOIN mine on sidestream.mine_representative_id = mine.mine_representative_id
+     INNER JOIN mine on sidestream.mine_id = mine.mine_id
      INNER JOIN minerepresentative on mine.mine_representative_id = minerepresentative.mine_representative_id
      WHERE requestaccess.request_access_status ='APPROVED' AND requestaccess.datarequestor_id = '${dataRequestorId}' AND requestaccess.sidestream_id = '${sidestreamId}' AND datarequestor.datarequestor_usertype='requestor'`;
 
     const { rows } = await client.query(selectQuery);
 
-    const sidestreams = {
-      companyName: rows[0].mine_representative_company_name,
-      mineName: rows[0].mine_name,
-      mineLocation: rows[0].mine_location,
-      mineDescription: rows[0].mine_description,
-      sidestreamId: rows[0].sidestream_id,
-      materialName: rows[0].sidestream_orename,
-      weight: rows[0].sidestream_weight,
-      size: rows[0].sidestream_size,
-      materialDescription: rows[0].sidestream_description,
-      mineralName: rows[0].mineral_composition_name,
-      mineralFormula: rows[0].mineral_chemical_formula,
-      mineralPercentage: rows[0].mineral_composition_percentage,
-    };
+    const sidestreams: SideStreams[] = rows.map((row) => ({
+      companyName: row.mine_representative_company_name,
+      mineName: row.mine_name,
+      mineLocation: row.mine_location,
+      mineDescription: row.mine_description,
+      sidestreamId: row.sidestream_id,
+      materialName: row.sidestream_orename,
+      weight: row.sidestream_weight,
+      size: row.sidestream_size,
+      materialDescription: row.sidestream_description,
+      mineralName: row.mineral_composition_name,
+      mineralFormula: row.mineral_chemical_formula,
+      mineralPercentage: row.mineral_composition_percentage,
+    }));
+
     return sidestreams;
   } catch (e) {
     console.error(e);
