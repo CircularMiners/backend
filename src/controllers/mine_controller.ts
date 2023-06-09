@@ -14,10 +14,8 @@ router.post("/addmine", async (req: Request, res: Response) => {
 });
 
 //router.get("/mine/:mineID?/:mineName?/:mineLocation?:mineDescription?:mineRepresentativeID?", async (req: Request, res: Response) => {
-router.get("/searchmine", async (req: Request, res: Response) => {
-  const representativeID = Guid.parse(
-    req.query.mineRepresentativeID?.toString() as string
-  );
+router.get("/searchmine/:mineRepId", async (req: Request, res: Response) => {
+  const representativeID = Guid.parse(req.params.mineRepId);
   const mineDAO = getMine(representativeID);
 
   const response = await mineDAO;
