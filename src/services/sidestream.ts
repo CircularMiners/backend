@@ -87,7 +87,7 @@ export async function findMineandSidestream(
     FROM sidestream LEFT JOIN mine on sidestream.mine_id = mine.mine_id
     LEFT JOIN requestaccess ON sidestream.sidestream_id = requestaccess.sidestream_id AND requestaccess.datarequestor_id = $1
     INNER JOIN minerepresentative on mine.mine_representative_id = minerepresentative.mine_representative_id
-    WHERE sidestream.sidestream_orename = $2`;
+    WHERE sidestream.sidestream_orename ILIKE '%' || $2 || '%'`;
     const insertValues = [dataRequestorId, oreName];
 
     const { rows } = await client.query(selectQuery, insertValues);
