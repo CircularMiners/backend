@@ -6,7 +6,7 @@ import cors from 'cors';
 
 
 const app = express();
-const allowedOrigins = ['http://localhost:3333'];
+const allowedOrigins = ['http://localhost:3333','https://stirring-monstera-d635e6.netlify.app'];
 const options: cors.CorsOptions = {
   origin: allowedOrigins
 };
