@@ -20,7 +20,12 @@ export async function insertToDB(
   try {
     await client.query("BEGIN");
 
-    const insertQuery = `INSERT INTO sidestream 
+    const selectQuery = `SELECT mine_representative_id FROM mine WHERE mine_representative_id = '${mineRepId}' AND mine_id = '${mineId}'`;
+    const { rows } = await client.query(selectQuery);
+    if (rows.length == 0) {
+      return "Mine Representative does not have access to this mine";
+    } else {
+      const insertQuery = `INSERT INTO sidestream 
         (sidestream_id, sidestream_createtime, sidestream_orename,
         sidestream_weight, sidestream_size, mine_representative_id,
         sidestream_description, mine_id
@@ -28,45 +33,45 @@ export async function insertToDB(
         sidestream_id, sidestream_createtime, sidestream_orename,
         sidestream_weight, sidestream_size, mine_representative_id,
         sidestream_description, mine_id`;
-    const insertValues = [
-      uuidv4(),
-      new Date(),
-      params.oreName,
-      params.weight,
-      params.size,
-      mineRepId,
-      params.description,
-      mineId,
-    ];
+      const insertValues = [
+        uuidv4(),
+        new Date(),
+        params.oreName,
+        params.weight,
+        params.size,
+        mineRepId,
+        params.description,
+        mineId,
+      ];
 
-    const { rows } = await client.query(insertQuery, insertValues);
-    const sideStream = rows[0] as SideStreamDAO;
+      const { rows } = await client.query(insertQuery, insertValues);
+      const sideStream = rows[0] as SideStreamDAO;
 
-    await client.query("COMMIT");
+      await client.query("COMMIT");
 
-    params.compositionMaterial.forEach(async (element) => {
-      try {
-        const insertQuery = `INSERT INTO mineralcomposition 
+      params.compositionMaterial.forEach(async (element) => {
+        try {
+          const insertQuery = `INSERT INTO mineralcomposition
         (mineral_composition_id, mineral_composition_name, mineral_chemical_formula,
         sidestream_id, mineral_composition_percentage
-        ) VALUES ($1, $2, $3, $4, $5 ) RETURNING 
+        ) VALUES ($1, (SELECT mineral_name FROM mineral where mineral_chemical_formula= '${element.mineralFormula}'), $2, $3, $4 ) RETURNING 
         mineral_composition_id, mineral_composition_name, mineral_chemical_formula,
         sidestream_id, mineral_composition_percentage`;
-        const insertValues = [
-          uuidv4(),
-          element.mineralName,
-          element.mineralFormula,
-          sideStream.sidestream_id,
-          element.mineralPercentage,
-        ];
+          const insertValues = [
+            uuidv4(),
+            element.mineralFormula,
+            sideStream.sidestream_id,
+            element.mineralPercentage,
+          ];
 
-        const { rows } = await client.query(insertQuery, insertValues);
-        return rows[0] as MineralCompositionDAO;
-      } catch (e) {
-        console.error(e);
-      }
-    });
-    return sideStream;
+          const { rows } = await client.query(insertQuery, insertValues);
+          return rows[0] as MineralCompositionDAO;
+        } catch (e) {
+          console.error(e);
+        }
+      });
+      return sideStream;
+    }
   } catch (e) {
     await client.query("ROLLBACK");
     console.error(e);
@@ -185,6 +190,37 @@ export async function getOneMineandSidestream(
     }));
 
     return sidestreams;
+  } catch (e) {
+    console.error(e);
+  } finally {
+    client.release();
+  }
+}
+
+export async function deleteSidestream(
+  minerepId: string,
+  sidestreamId: string
+) {
+  const client = await pool.connect();
+  try {
+    const selectQuery = `SELECT mine_representative_id FROM minerepresentative WHERE mine_representative_id = '${minerepId}' AND mine_representative_usertype = 'representative'`;
+    const { rows } = await client.query(selectQuery);
+    if (rows.length == 0) {
+      return "Mine Representative not found";
+    } else {
+      const deleteQuery = `DELETE FROM requestaccess where sidestream_id = '${sidestreamId}' and mine_representative_id = '${minerepId}'`;
+      await client.query(deleteQuery);
+
+      const deleteQuery2 = `DELETE FROM mineralcomposition where sidestream_id = '${sidestreamId}'`;
+      await client.query(deleteQuery2);
+
+      const deleteQuery3 = `DELETE FROM sidestream WHERE sidestream_id = '${sidestreamId}' and mine_representative_id = '${minerepId}'`;
+      const { rows } = await client.query(deleteQuery3);
+      if (rows.length == 0) {
+        return "Sidestream deleted";
+      }
+      return "Sidestream deleted";
+    }
   } catch (e) {
     console.error(e);
   } finally {

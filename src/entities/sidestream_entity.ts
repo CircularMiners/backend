@@ -52,7 +52,6 @@ export interface SideStreamwithMineralCompositionDTO {
 
 interface MineComposition {
   mineralFormula: string;
-  mineralName: string;
   mineralPercentage: number;
 }
 
