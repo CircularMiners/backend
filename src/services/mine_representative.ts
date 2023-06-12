@@ -47,7 +47,7 @@ export async function insertToDB(
         return rows[0] as MineRepresentativeDAO;
       }
     } else {
-      return "User already exists";
+      return { message: "User already exists" };
     }
   } catch (e) {
     await client.query("ROLLBACK");

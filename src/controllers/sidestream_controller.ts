@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { SideStreamDTO } from "../entities/sidestream_entity";
 import {
+  deleteSidestream,
   findMineandSidestream,
   getAllMineandSidestream,
   getOneMineandSidestream,
@@ -64,5 +65,21 @@ router.get("/:mineRepId/:mineId", async (req: Request, res: Response) => {
   const response = await sidestreams;
   res.status(200).send(response);
 });
+
+//this is for data representative to DELETE sidestream
+router.delete(
+  "/:mineRepId/:sideStreamId",
+  async (req: Request, res: Response) => {
+    const mineRepId = req.params.mineRepId;
+    const sideStreamId = req.params.sideStreamId;
+    if (!Guid.isGuid(mineRepId) || !Guid.isGuid(sideStreamId)) {
+      res.status(400).send("Bad Request");
+    } else {
+      const sidestreams = deleteSidestream(mineRepId, sideStreamId);
+      const message = await sidestreams;
+      res.status(200).send(message);
+    }
+  }
+);
 
 export default router;
