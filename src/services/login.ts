@@ -13,12 +13,12 @@ export async function checkCredentials(params: LoginDTO) {
         rows[0].mine_representative_password
       );
       if (isMatch) {
-        return { status: "validated", id: rows[0].mine_representative_id };
+        return { message: "validated", id: rows[0].mine_representative_id };
       } else {
-        return { status: "Invalid Password" };
+        return { message: "Invalid Password" };
       }
     } else {
-      return { status: "Invalid User" };
+      return { message: "Invalid User" };
     }
   } else if (params.userType == "requestor") {
     const selectQuery2 = `SELECT datarequestor_id, datarequestor_password FROM datarequestor WHERE datarequestor_email = '${params.userEmail}'`;
@@ -30,12 +30,12 @@ export async function checkCredentials(params: LoginDTO) {
         rows[0].datarequestor_password
       );
       if (isMatch) {
-        return { status: "validated", id: rows[0].datarequestor_id };
+        return { message: "validated", id: rows[0].datarequestor_id };
       } else {
-        return { status: "Invalid Password" };
+        return { message: "Invalid Password" };
       }
     } else {
-      return { status: "Invalid User" };
+      return { message: "Invalid User" };
     }
   }
 }

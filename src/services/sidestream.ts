@@ -23,7 +23,9 @@ export async function insertToDB(
     const selectQuery = `SELECT mine_representative_id FROM mine WHERE mine_representative_id = '${mineRepId}' AND mine_id = '${mineId}'`;
     const { rows } = await client.query(selectQuery);
     if (rows.length == 0) {
-      return "Mine Representative does not have access to this mine";
+      return {
+        message: "Mine Representative does not have access to this mine",
+      };
     } else {
       const insertQuery = `INSERT INTO sidestream 
         (sidestream_id, sidestream_createtime, sidestream_orename,
@@ -206,7 +208,7 @@ export async function deleteSidestream(
     const selectQuery = `SELECT mine_representative_id FROM minerepresentative WHERE mine_representative_id = '${minerepId}' AND mine_representative_usertype = 'representative'`;
     const { rows } = await client.query(selectQuery);
     if (rows.length == 0) {
-      return "Mine Representative not found";
+      return { message: "Mine Representative not found" };
     } else {
       const deleteQuery = `DELETE FROM requestaccess where sidestream_id = '${sidestreamId}' and mine_representative_id = '${minerepId}'`;
       await client.query(deleteQuery);
@@ -217,9 +219,9 @@ export async function deleteSidestream(
       const deleteQuery3 = `DELETE FROM sidestream WHERE sidestream_id = '${sidestreamId}' and mine_representative_id = '${minerepId}'`;
       const { rows } = await client.query(deleteQuery3);
       if (rows.length == 0) {
-        return "Sidestream deleted";
+        return { message: "Sidestream deleted" };
       }
-      return "Sidestream deleted";
+      return { message: "Sidestream deleted" };
     }
   } catch (e) {
     console.error(e);

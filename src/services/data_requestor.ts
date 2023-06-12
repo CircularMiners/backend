@@ -44,7 +44,7 @@ export async function insertToDB_DataReq(
         return rows[0] as DataRequestorDAO;
       }
     } else {
-      return "User already exists";
+      return { message: "User already exists" };
     }
   } catch (e) {
     await client.query("ROLLBACK");
